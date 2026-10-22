@@ -3,27 +3,27 @@ import 'package:flutter/material.dart';
 import '../config/app_theme.dart';
 import '../models/libros/libro.dart';
 import '../routes/app_routes.dart';
-import 'add_book_screen.dart';
+import 'agregar_libro_screen.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class InicioScreen extends StatefulWidget {
+  const InicioScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<InicioScreen> createState() => _InicioScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _InicioScreenState extends State<InicioScreen> {
   final List<Libro> _books = [];
 
-  void _openAddBook() {
+  void _navegarAgregarLibroScreen() {
     Navigator.of(context).push<void>(
       MaterialPageRoute<void>(
-        builder: (_) => AddBookScreen(onBookCreated: _addBook),
+        builder: (_) => AgregarLibroScreen(onBookCreated: _AgregarLibro),
       ),
     );
   }
 
-  void _addBook(Libro book) {
+  void _AgregarLibro(Libro book) {
     if (mounted) setState(() => _books.add(book));
   }
 
@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     ),
     floatingActionButton: FloatingActionButton.extended(
-      onPressed: _openAddBook,
+      onPressed: _navegarAgregarLibroScreen,
       backgroundColor: AppTheme.primary,
       foregroundColor: Colors.white,
       icon: const Icon(Icons.add_rounded),

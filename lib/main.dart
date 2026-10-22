@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'routes/app_routes.dart';
-import 'screens/home_screen.dart';
+import 'screens/Inicio_screen.dart';
 import 'screens/login_screen.dart';
 
 void main() => runApp(const SmartbookApp());
@@ -19,7 +19,7 @@ class SmartbookApp extends StatelessWidget {
         case AppRoutes.login:
           return MaterialPageRoute(builder: (context) => const LoginScreen());
         case AppRoutes.home:
-          return MaterialPageRoute(builder: (context) => const HomeScreen());
+          return MaterialPageRoute(builder: (context) => const InicioScreen());
         default:
           return MaterialPageRoute(builder: (context) => const LoginScreen());
       }

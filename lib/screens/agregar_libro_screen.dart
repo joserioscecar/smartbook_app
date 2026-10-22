@@ -7,16 +7,16 @@ import '../widgets/custom_text_field.dart';
 import '../widgets/book_number_field.dart';
 import '../widgets/primary_button.dart';
 
-class AddBookScreen extends StatefulWidget {
-  const AddBookScreen({required this.onBookCreated, super.key});
+class AgregarLibroScreen extends StatefulWidget {
+  const AgregarLibroScreen({required this.onBookCreated, super.key});
 
   final ValueChanged<Libro> onBookCreated;
 
   @override
-  State<AddBookScreen> createState() => _AddBookScreenState();
+  State<AgregarLibroScreen> createState() => _AgregarLibroScreenState();
 }
 
-class _AddBookScreenState extends State<AddBookScreen> {
+class _AgregarLibroScreenState extends State<AgregarLibroScreen> {
   final _controller = BookFormController();
 
   @override

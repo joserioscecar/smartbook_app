@@ -24,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _submit() {
+  void _Login() {
     Navigator.of(context).pushReplacementNamed(AppRoutes.home);
   }
 
@@ -78,10 +78,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 18),
                     PasswordField(
                       controller: _password,
-                      onFieldSubmitted: (_) => _submit(),
+                      onFieldSubmitted: (_) => _Login(),
                     ),
                     const SizedBox(height: 24),
-                    PrimaryButton(label: 'Entrar', onPressed: _submit),
+                    PrimaryButton(label: 'Entrar', onPressed: _Login),
                   ],
                 ),
               ),
