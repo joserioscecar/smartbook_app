@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:smartbook_app/models/login/login_request.dart';
+import 'package:smartbook_app/services/remote/login_service.dart';
 
 import '../config/app_theme.dart';
 import '../routes/app_routes.dart';
@@ -14,8 +16,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final LoginService _loginService = LoginService();
+
+  final _emailController = TextEditingController(
+    text: "centrodeidiomas@cecar.edu.co",
+  );
+  final _passwordController = TextEditingController(text: "AdminCDI2026");
 
   @override
   void dispose() {
@@ -24,8 +30,15 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _login() {
-    Navigator.of(context).pushReplacementNamed(AppRoutes.home);
+  Future<void> _login() async {
+    var request = LoginRequest(
+      email: _emailController.text,
+      password: _passwordController.text,
+    );
+    var response = await _loginService.login(request);
+    if (response != null) {
+      Navigator.of(context).pushReplacementNamed(AppRoutes.home);
+    }
   }
 
   @override
@@ -41,7 +54,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-
                     const Text(
                       'Iniciar sesión',
                       textAlign: TextAlign.center,
@@ -59,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         semanticLabel: 'CDI Centro de Idiomas CECAR',
                       ),
                     ),
-                    
+
                     const SizedBox(height: 8),
 
                     const SizedBox(height: 32),
@@ -83,9 +95,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 24),
                     PrimaryButton(label: 'Entrar', onPressed: _login),
                     TextButton(
-                      onPressed: () => Navigator.of(
-                        context,
-                      ).pushNamed(AppRoutes.resetPassword),
+                      onPressed: () {
+                        _login();
+                      },
                       child: const Text(
                         '¿Olvidaste tu contraseña?',
                         textAlign: TextAlign.center,
