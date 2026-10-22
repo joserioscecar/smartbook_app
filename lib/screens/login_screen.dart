@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../config/app_theme.dart';
 import '../routes/app_routes.dart';
-import '../widgets/custom_text_field.dart';
-import '../widgets/password_field.dart';
-import '../widgets/primary_button.dart';
+import '../widgets/buttons/primary_button.dart';
+import '../widgets/fields/custom_text_field.dart';
+import '../widgets/fields/password_field.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,17 +14,17 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _email = TextEditingController();
-  final _password = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   void dispose() {
-    _email.dispose();
-    _password.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
-  void _Login() {
+  void _login() {
     Navigator.of(context).pushReplacementNamed(AppRoutes.home);
   }
 
@@ -64,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     const SizedBox(height: 32),
                     CustomTextField(
-                      controller: _email,
+                      controller: _emailController,
                       label: 'Correo electrónico',
                       hintText: 'nombre@correo.com',
                       keyboardType: TextInputType.emailAddress,
@@ -77,11 +77,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 18),
                     PasswordField(
-                      controller: _password,
-                      onFieldSubmitted: (_) => _Login(),
+                      controller: _passwordController,
+                      onFieldSubmitted: (_) => _login(),
                     ),
                     const SizedBox(height: 24),
-                    PrimaryButton(label: 'Entrar', onPressed: _Login),
+                    PrimaryButton(label: 'Entrar', onPressed: _login),
                   ],
                 ),
               ),

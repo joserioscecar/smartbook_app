@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../config/app_theme.dart';
+import '../../config/app_theme.dart';
 
 class SecondaryButton extends StatelessWidget {
   const SecondaryButton({

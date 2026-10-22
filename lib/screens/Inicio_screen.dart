@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../config/app_theme.dart';
-import '../models/libros/libro.dart';
 import '../routes/app_routes.dart';
 import 'agregar_libro_screen.dart';
 
@@ -13,18 +12,12 @@ class InicioScreen extends StatefulWidget {
 }
 
 class _InicioScreenState extends State<InicioScreen> {
-  final List<Libro> _books = [];
-
   void _navegarAgregarLibroScreen() {
     Navigator.of(context).push<void>(
       MaterialPageRoute<void>(
-        builder: (_) => AgregarLibroScreen(onBookCreated: _AgregarLibro),
+        builder: (_) => const AgregarLibroScreen(),
       ),
     );
-  }
-
-  void _AgregarLibro(Libro book) {
-    if (mounted) setState(() => _books.add(book));
   }
 
   @override
@@ -70,28 +63,6 @@ class _InicioScreenState extends State<InicioScreen> {
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Color(0xFF77798B)),
               ),
-              if (_books.isNotEmpty) ...[
-                const SizedBox(height: 32),
-                const Text(
-                  'Mis libros',
-                  style: TextStyle(
-                    color: AppTheme.secondary,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                for (final book in _books)
-                  ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: const Icon(
-                      Icons.menu_book_rounded,
-                      color: AppTheme.primary,
-                    ),
-                    title: Text(book.nombre),
-                    subtitle: Text('${book.nivel} · ${book.edicion}'),
-                  ),
-              ],
             ],
           ),
         ),

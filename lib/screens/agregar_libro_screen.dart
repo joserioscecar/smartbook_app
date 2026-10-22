@@ -1,28 +1,46 @@
 import 'package:flutter/material.dart';
 
 import '../config/app_theme.dart';
-import '../controllers/book_form_controller.dart';
-import '../models/libros/libro.dart';
-import '../widgets/custom_text_field.dart';
-import '../widgets/book_number_field.dart';
-import '../widgets/primary_button.dart';
+import '../widgets/buttons/primary_button.dart';
+import '../widgets/fields/book_number_field.dart';
+import '../widgets/fields/custom_text_field.dart';
 
 class AgregarLibroScreen extends StatefulWidget {
-  const AgregarLibroScreen({required this.onBookCreated, super.key});
-
-  final ValueChanged<Libro> onBookCreated;
+  const AgregarLibroScreen({super.key});
 
   @override
   State<AgregarLibroScreen> createState() => _AgregarLibroScreenState();
 }
 
 class _AgregarLibroScreenState extends State<AgregarLibroScreen> {
-  final _controller = BookFormController();
+  final _nombreController = TextEditingController();
+  final _nivelController = TextEditingController();
+  final _tipoController = TextEditingController();
+  final _edicionController = TextEditingController();
+  final _unidadesController = TextEditingController();
+  final _valorCompraController = TextEditingController();
+  final _valorVentaPublicoController = TextEditingController();
+  final _loteController = TextEditingController();
 
   @override
   void dispose() {
-    _controller.dispose();
+    for (final controller in [
+      _nombreController,
+      _nivelController,
+      _tipoController,
+      _edicionController,
+      _unidadesController,
+      _valorCompraController,
+      _valorVentaPublicoController,
+      _loteController,
+    ]) {
+      controller.dispose();
+    }
     super.dispose();
+  }
+
+  void _guardarLibro() {
+    Navigator.of(context).pop();
   }
 
   @override
@@ -49,58 +67,52 @@ class _AgregarLibroScreenState extends State<AgregarLibroScreen> {
                 ),
                 const SizedBox(height: 24),
                 CustomTextField(
-                  controller: _controller.nombre,
+                  controller: _nombreController,
                   label: 'Nombre',
                   textInputAction: TextInputAction.next,
                 ),
                 const SizedBox(height: 14),
                 CustomTextField(
-                  controller: _controller.nivel,
+                  controller: _nivelController,
                   label: 'Nivel',
                   hintText: 'Ej. Teens A2.1',
                   textInputAction: TextInputAction.next,
                 ),
                 const SizedBox(height: 14),
-                BookNumberField(controller: _controller.tipo, label: 'Tipo'),
+                BookNumberField(controller: _tipoController, label: 'Tipo'),
                 const SizedBox(height: 14),
                 CustomTextField(
-                  controller: _controller.edicion,
+                  controller: _edicionController,
                   label: 'Edición',
                   hintText: 'Ej. 1ra',
                   textInputAction: TextInputAction.next,
                 ),
                 const SizedBox(height: 14),
                 BookNumberField(
-                  controller: _controller.unidades,
+                  controller: _unidadesController,
                   label: 'Unidades',
                 ),
                 const SizedBox(height: 14),
                 BookNumberField(
-                  controller: _controller.valorCompra,
+                  controller: _valorCompraController,
                   label: 'Valor de compra',
                 ),
                 const SizedBox(height: 14),
                 BookNumberField(
-                  controller: _controller.valorVentaPublico,
+                  controller: _valorVentaPublicoController,
                   label: 'Valor venta público',
                 ),
                 const SizedBox(height: 14),
                 CustomTextField(
-                  controller: _controller.lote,
+                  controller: _loteController,
                   label: 'Lote',
                   textInputAction: TextInputAction.done,
-                  onFieldSubmitted: (_) => _controller.save(
-                    onBookCreated: widget.onBookCreated,
-                    onClose: () => Navigator.of(context).pop(),
-                  ),
+                  onFieldSubmitted: (_) => _guardarLibro(),
                 ),
                 const SizedBox(height: 22),
                 PrimaryButton(
                   label: 'Guardar libro',
-                  onPressed: () => _controller.save(
-                    onBookCreated: widget.onBookCreated,
-                    onClose: () => Navigator.of(context).pop(),
-                  ),
+                  onPressed: _guardarLibro,
                 ),
               ],
             ),
