@@ -82,6 +82,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 24),
                     PrimaryButton(label: 'Entrar', onPressed: _login),
+                    TextButton(
+                      onPressed: () => Navigator.of(
+                        context,
+                      ).pushNamed(AppRoutes.resetPassword),
+                      child: const Text(
+                        '¿Olvidaste tu contraseña?',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: AppTheme.primary),
+                      ),
+                    ),
                   ],
                 ),
               ),
