@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'routes/app_routes.dart';
-import 'screens/Inicio_screen.dart';
+import 'screens/inicio_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/restablecer_contrasena_screen.dart';
 
