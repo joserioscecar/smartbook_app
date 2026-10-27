@@ -123,13 +123,17 @@ class ApiService {
     Map<String, dynamic>? queryParameters,
     Map<String, String>? headers,
     JsonParser<T>? parser,
-    JsonParser<T>? fromJson,
+    FromJson<T>? fromJson,
   }) => _request<T>(
     'GET',
     endpoint,
     queryParameters: queryParameters,
     headers: headers,
-    parser: parser ?? fromJson,
+    parser:
+        parser ??
+        (fromJson == null
+            ? null
+            : (data) => fromJson(data as Map<String, dynamic>)),
   );
 
   Future<ApiResponse<T>> post<T>(
