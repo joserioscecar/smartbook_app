@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartbook_app/models/login/login_request.dart';
+import 'package:smartbook_app/services/remote/api_service.dart';
 import 'package:smartbook_app/services/remote/login_service.dart';
 
 import '../config/app_theme.dart';
@@ -31,13 +32,28 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _login() async {
-    var request = LoginRequest(
+    final request = LoginRequest(
       email: _emailController.text,
       password: _passwordController.text,
     );
-    var response = await _loginService.login(request);
-    if (response != null) {
-      Navigator.of(context).pushReplacementNamed(AppRoutes.home);
+
+    try {
+      final loginSuccess = await _loginService.login(request);
+      if (!mounted) return;
+
+      if (loginSuccess) {
+        Navigator.of(context).pushReplacementNamed(AppRoutes.home);
+        return;
+      }
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Error de autenticación')));
+    } on ApiException catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(error.message)));
     }
   }
 

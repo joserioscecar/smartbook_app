@@ -7,11 +7,13 @@ class BookNumberField extends StatelessWidget {
   const BookNumberField({
     required this.controller,
     required this.label,
+    this.validator,
     super.key,
   });
 
   final TextEditingController controller;
   final String label;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) => CustomTextField(
@@ -20,5 +22,6 @@ class BookNumberField extends StatelessWidget {
     keyboardType: TextInputType.number,
     textInputAction: TextInputAction.next,
     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+    validator: validator,
   );
 }
