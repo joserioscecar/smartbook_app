@@ -1,4 +1,5 @@
 import '../../config/app_config.dart';
+import '../../extensions/date_time_extensions.dart';
 import '../../models/venta/crear_venta_request.dart';
 import '../../models/venta/venta_response.dart';
 import '../../models/venta/venta_resumen_response.dart';
@@ -25,27 +26,22 @@ class VentaService {
     return _api.get<List<VentaResumenResponse>>(
       '/Ventas/',
       queryParameters: {
-        if (desde != null) 'desde': _fechaQuery(desde),
-        if (hasta != null) 'hasta': _fechaQuery(hasta),
+        if (desde != null) 'desde': desde.toIsoDateString(),
+        if (hasta != null) 'hasta': hasta.toIsoDateString(),
       },
       headers: {'Authorization': 'Bearer $token'},
       fromJsonList: VentaResumenResponse.fromJsonList,
     );
   }
 
-  String _fechaQuery(DateTime fecha) =>
-      '${fecha.year.toString().padLeft(4, '0')}-'
-      '${fecha.month.toString().padLeft(2, '0')}-'
-      '${fecha.day.toString().padLeft(2, '0')}';
-
-  Future<ApiResponse<dynamic>> crearVenta(CrearVentaRequest request) async {
+  Future<ApiResponse<void>> crearVenta(CrearVentaRequest request) async {
     final token = await _storage.readToken();
     if (token == null || token.isEmpty) {
       throw const SessionException(
         'No active session. Sign in to create a sale.',
       );
     }
-    return _api.post<dynamic>(
+    return _api.post<void>(
       '/Ventas',
       headers: {'Authorization': 'Bearer $token'},
       body: request.toJson(),
