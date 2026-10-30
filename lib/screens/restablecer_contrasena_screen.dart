@@ -68,14 +68,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Center(
-                          child: Image.asset(
-                            'assets/images/cdi_logo.png',
-                            width: 280,
-                            semanticLabel: 'CDI Centro de Idiomas CECAR',
-                          ),
-                        ),
-                        const SizedBox(height: 28),
                         const Text(
                           'Restablecer Contraseña',
                           textAlign: TextAlign.center,

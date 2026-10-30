@@ -50,10 +50,19 @@ class _ButtonContent extends StatelessWidget {
       );
     }
     return Row(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
+        Expanded(
+          child: Text(
+            label,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            softWrap: true,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ),
         if (icon != null) ...[const SizedBox(width: 10), Icon(icon, size: 20)],
       ],
     );

@@ -23,6 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
     text: "centrodeidiomas@cecar.edu.co",
   );
   final _passwordController = TextEditingController(text: "AdminCDI2026");
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -32,6 +33,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _login() async {
+    if (_isLoading) return;
+    setState(() => _isLoading = true);
     final request = LoginRequest(
       email: _emailController.text,
       password: _passwordController.text,
@@ -54,6 +57,8 @@ class _LoginScreenState extends State<LoginScreen> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(error.message)));
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
@@ -109,11 +114,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       onFieldSubmitted: (_) => _login(),
                     ),
                     const SizedBox(height: 24),
-                    PrimaryButton(label: 'Entrar', onPressed: _login),
+                    PrimaryButton(
+                      label: 'Entrar',
+                      onPressed: _login,
+                      isLoading: _isLoading,
+                    ),
                     TextButton(
-                      onPressed: () {
-                        _login();
-                      },
+                      onPressed: _isLoading
+                          ? null
+                          : () => Navigator.of(
+                              context,
+                            ).pushNamed(AppRoutes.resetPassword),
                       child: const Text(
                         '¿Olvidaste tu contraseña?',
                         textAlign: TextAlign.center,

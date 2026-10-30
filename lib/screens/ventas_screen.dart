@@ -199,7 +199,7 @@ class _VentasScreenState extends State<VentasScreen> {
                             ),
                           ),
                           trailing: const Icon(Icons.chevron_right_rounded),
-                          onTap: () => Navigator.of(context).pushNamed<void>(
+                          onTap: () => Navigator.of(context).pushNamed<Object?>(
                             AppRoutes.saleDetail,
                             arguments: ConsultarVentaRouteArgs(
                               ventaId: venta.id,

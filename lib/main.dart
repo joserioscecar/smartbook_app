@@ -66,7 +66,7 @@ class _SmartbookAppState extends State<SmartbookApp> {
             builder: (_) => LibrosScreen(onLogout: args?.onLogout),
           );
         case AppRoutes.createBook:
-          return MaterialPageRoute(
+          return MaterialPageRoute<bool?>(
             settings: settings,
             builder: (_) => const AgregarLibroScreen(),
           );
@@ -78,7 +78,7 @@ class _SmartbookAppState extends State<SmartbookApp> {
           );
         case AppRoutes.editClient:
           final args = settings.arguments! as EditarClienteRouteArgs;
-          return MaterialPageRoute(
+          return MaterialPageRoute<bool?>(
             settings: settings,
             builder: (_) => EditarClienteScreen(
               cliente: args.cliente,
@@ -93,7 +93,7 @@ class _SmartbookAppState extends State<SmartbookApp> {
           );
         case AppRoutes.createSale:
           final args = settings.arguments as CrearVentaRouteArgs?;
-          return MaterialPageRoute(
+          return MaterialPageRoute<bool?>(
             settings: settings,
             builder: (_) => CrearVentaScreen(
               ventaService: args?.ventaService,
@@ -103,7 +103,7 @@ class _SmartbookAppState extends State<SmartbookApp> {
           );
         case AppRoutes.saleDetail:
           final args = settings.arguments as ConsultarVentaRouteArgs?;
-          return MaterialPageRoute(
+          return MaterialPageRoute<Object?>(
             settings: settings,
             builder: (_) => ConsultarVentaScreen(
               ventaId: args?.ventaId,
