@@ -117,6 +117,48 @@ class ApiService {
     parser: parser ?? _jsonParser(fromJson),
   );
 
+  /// Envía campos y archivos como `multipart/form-data`.
+  /// El `Content-Type` con su boundary se establece automáticamente.
+  Future<ApiResponse<T>> postMultipart<T>(
+    String endpoint, {
+    required List<http.MultipartFile> files,
+    Map<String, String> fields = const {},
+    Map<String, dynamic>? queryParameters,
+    Map<String, String>? headers,
+    JsonParser<T>? parser,
+    FromJson<T>? fromJson,
+    bool ignoreResponseBody = false,
+  }) => _request<T>(
+    'POST',
+    endpoint,
+    queryParameters: queryParameters,
+    headers: headers,
+    fields: fields,
+    files: files,
+    parser: parser ?? _jsonParser(fromJson),
+    ignoreResponseBody: ignoreResponseBody,
+  );
+
+  Future<ApiResponse<T>> putMultipart<T>(
+    String endpoint, {
+    required List<http.MultipartFile> files,
+    Map<String, String> fields = const {},
+    Map<String, dynamic>? queryParameters,
+    Map<String, String>? headers,
+    JsonParser<T>? parser,
+    FromJson<T>? fromJson,
+    bool ignoreResponseBody = false,
+  }) => _request<T>(
+    'PUT',
+    endpoint,
+    queryParameters: queryParameters,
+    headers: headers,
+    fields: fields,
+    files: files,
+    parser: parser ?? _jsonParser(fromJson),
+    ignoreResponseBody: ignoreResponseBody,
+  );
+
   Future<ApiResponse<T>> put<T>(
     String endpoint, {
     Object? body,
@@ -160,16 +202,30 @@ class ApiService {
     Object? body,
     Map<String, dynamic>? queryParameters,
     Map<String, String>? headers,
+    Map<String, String>? fields,
+    List<http.MultipartFile>? files,
     JsonParser<T>? parser,
     bool ignoreResponseBody = false,
   }) async {
     final uri = _buildUri(endpoint, queryParameters);
 
-    final request = http.Request(method, uri)
-      ..headers.addAll({..._defaultHeaders, ...?headers});
-
-    if (body != null) {
-      request.body = body is String ? body : jsonEncode(body);
+    final requestHeaders = {..._defaultHeaders, ...?headers};
+    late final http.BaseRequest request;
+    if (files != null) {
+      requestHeaders.removeWhere(
+        (name, _) => name.toLowerCase() == 'content-type',
+      );
+      request = http.MultipartRequest(method, uri)
+        ..fields.addAll(fields ?? const {})
+        ..files.addAll(files)
+        ..headers.addAll(requestHeaders);
+    } else {
+      final jsonRequest = http.Request(method, uri)
+        ..headers.addAll(requestHeaders);
+      if (body != null) {
+        jsonRequest.body = body is String ? body : jsonEncode(body);
+      }
+      request = jsonRequest;
     }
 
     _log('→ $method $uri');
