@@ -127,7 +127,6 @@ class ApiService {
     Map<String, String>? headers,
     JsonParser<T>? parser,
     FromJson<T>? fromJson,
-    bool ignoreResponseBody = false,
   }) => _request<T>(
     'POST',
     endpoint,
@@ -136,7 +135,6 @@ class ApiService {
     fields: fields,
     files: files,
     parser: parser ?? _jsonParser(fromJson),
-    ignoreResponseBody: ignoreResponseBody,
   );
 
   Future<ApiResponse<T>> putMultipart<T>(
@@ -147,7 +145,6 @@ class ApiService {
     Map<String, String>? headers,
     JsonParser<T>? parser,
     FromJson<T>? fromJson,
-    bool ignoreResponseBody = false,
   }) => _request<T>(
     'PUT',
     endpoint,
@@ -156,7 +153,6 @@ class ApiService {
     fields: fields,
     files: files,
     parser: parser ?? _jsonParser(fromJson),
-    ignoreResponseBody: ignoreResponseBody,
   );
 
   Future<ApiResponse<T>> put<T>(
@@ -165,7 +161,6 @@ class ApiService {
     Map<String, dynamic>? queryParameters,
     Map<String, String>? headers,
     JsonParser<T>? parser,
-    bool ignoreResponseBody = false,
   }) => _request<T>(
     'PUT',
     endpoint,
@@ -173,7 +168,6 @@ class ApiService {
     queryParameters: queryParameters,
     headers: headers,
     parser: parser,
-    ignoreResponseBody: ignoreResponseBody,
   );
 
   Future<ApiResponse<T>> delete<T>(
@@ -205,7 +199,6 @@ class ApiService {
     Map<String, String>? fields,
     List<http.MultipartFile>? files,
     JsonParser<T>? parser,
-    bool ignoreResponseBody = false,
   }) async {
     final uri = _buildUri(endpoint, queryParameters);
 
@@ -242,7 +235,6 @@ class ApiService {
       return _handleResponse<T>(
         response,
         parser,
-        ignoreResponseBody: ignoreResponseBody,
       );
     } on TimeoutException {
       throw const ApiTimeoutException();
@@ -253,9 +245,8 @@ class ApiService {
 
   ApiResponse<T> _handleResponse<T>(
     http.Response response,
-    JsonParser<T>? parser, {
-    bool ignoreResponseBody = false,
-  }) {
+    JsonParser<T>? parser,
+  ) {
     final status = response.statusCode;
     final data = _decodeBody(response.bodyBytes);
 
@@ -275,7 +266,7 @@ class ApiService {
     try {
       return ApiResponse<T>(
         statusCode: status,
-        data: data == null || ignoreResponseBody
+        data: data == null || T.toString() == 'void'
             ? null
             : _parse<T>(data, parser),
         headers: response.headers,

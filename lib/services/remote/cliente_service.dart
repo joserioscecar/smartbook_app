@@ -46,10 +46,9 @@ class ClienteService {
     }
 
     return _api.put<void>(
-      '/Clientes/${Uri.encodeComponent(identificacion.trim())}',
+      '/Clientes/$identificacion',
       headers: {'Authorization': 'Bearer $token'},
       body: request.toJson(),
-      ignoreResponseBody: true,
     );
   }
 }
