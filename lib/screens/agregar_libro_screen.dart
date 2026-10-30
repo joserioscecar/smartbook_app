@@ -20,12 +20,11 @@ class _AgregarLibroScreenState extends State<AgregarLibroScreen> {
   final _libroService = LibroService();
   final _nombreController = TextEditingController();
   final _nivelController = TextEditingController();
-  final _tipoController = TextEditingController();
-  final _edicionController = TextEditingController();
   final _unidadesController = TextEditingController();
   final _valorCompraController = TextEditingController();
   final _valorVentaPublicoController = TextEditingController();
   final _loteController = TextEditingController();
+  int? _tipoSeleccionado;
   bool _guardando = false;
 
   @override
@@ -33,8 +32,6 @@ class _AgregarLibroScreenState extends State<AgregarLibroScreen> {
     for (final controller in [
       _nombreController,
       _nivelController,
-      _tipoController,
-      _edicionController,
       _unidadesController,
       _valorCompraController,
       _valorVentaPublicoController,
@@ -58,6 +55,21 @@ class _AgregarLibroScreenState extends State<AgregarLibroScreen> {
     return null;
   }
 
+  void _limpiarFormulario() {
+    for (final controller in [
+      _nombreController,
+      _nivelController,
+      _unidadesController,
+      _valorCompraController,
+      _valorVentaPublicoController,
+      _loteController,
+    ]) {
+      controller.clear();
+    }
+    _formKey.currentState?.reset();
+    setState(() => _tipoSeleccionado = null);
+  }
+
   Future<void> _guardarLibro() async {
     if (_guardando || !(_formKey.currentState?.validate() ?? false)) return;
 
@@ -67,14 +79,13 @@ class _AgregarLibroScreenState extends State<AgregarLibroScreen> {
         CrearLibroRequest(
           nombre: _nombreController.text.trim(),
           nivel: _nivelController.text.trim(),
-          tipo: int.parse(_tipoController.text.trim()),
-          edicion: _edicionController.text.trim(),
+          tipo: _tipoSeleccionado!,
           unidades: int.parse(_unidadesController.text.trim()),
+          lote: int.parse(_loteController.text.trim()),
           valorCompra: int.parse(_valorCompraController.text.trim()),
           valorVentaPublico: int.parse(
             _valorVentaPublicoController.text.trim(),
           ),
-          lote: _loteController.text.trim(),
         ),
       );
 
@@ -90,10 +101,10 @@ class _AgregarLibroScreenState extends State<AgregarLibroScreen> {
         return;
       }
 
+      _limpiarFormulario();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Libro creado correctamente.')),
       );
-      Navigator.of(context).pop(true);
     } on ApiException catch (error) {
       if (!mounted) return;
       ScaffoldMessenger.of(
@@ -149,18 +160,51 @@ class _AgregarLibroScreenState extends State<AgregarLibroScreen> {
                     validator: _validarRequerido,
                   ),
                   const SizedBox(height: 14),
-                  BookNumberField(
-                    controller: _tipoController,
-                    label: 'Tipo',
-                    validator: _validarNumero,
-                  ),
-                  const SizedBox(height: 14),
-                  CustomTextField(
-                    controller: _edicionController,
-                    label: 'Edición',
-                    hintText: 'Ej. 1ra',
-                    textInputAction: TextInputAction.next,
-                    validator: _validarRequerido,
+                  DropdownButtonFormField<int>(
+                    initialValue: _tipoSeleccionado,
+                    decoration: InputDecoration(
+                      labelText: 'Tipo',
+                      filled: true,
+                      fillColor: const Color(0xFFF7F8FC),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 18,
+                        vertical: 18,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(14),
+                        borderSide: const BorderSide(color: Color(0xFFE5E7EF)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(14),
+                        borderSide: const BorderSide(color: Color(0xFFE5E7EF)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(14),
+                        borderSide: const BorderSide(
+                          color: AppTheme.primary,
+                          width: 1.5,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(14),
+                        borderSide: const BorderSide(color: AppTheme.primary),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(14),
+                        borderSide: const BorderSide(
+                          color: AppTheme.primary,
+                          width: 1.5,
+                        ),
+                      ),
+                    ),
+                    items: const [
+                      DropdownMenuItem(value: 1, child: Text("Student's Book")),
+                      DropdownMenuItem(value: 2, child: Text('Workbook')),
+                    ],
+                    onChanged: (value) =>
+                        setState(() => _tipoSeleccionado = value),
+                    validator: (value) =>
+                        value == null ? 'Selecciona el tipo de libro.' : null,
                   ),
                   const SizedBox(height: 14),
                   BookNumberField(
@@ -181,12 +225,10 @@ class _AgregarLibroScreenState extends State<AgregarLibroScreen> {
                     validator: _validarNumero,
                   ),
                   const SizedBox(height: 14),
-                  CustomTextField(
+                  BookNumberField(
                     controller: _loteController,
                     label: 'Lote',
-                    textInputAction: TextInputAction.done,
-                    onFieldSubmitted: (_) => _guardarLibro(),
-                    validator: _validarRequerido,
+                    validator: _validarNumero,
                   ),
                   const SizedBox(height: 22),
                   PrimaryButton(

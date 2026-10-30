@@ -62,10 +62,8 @@ class _LibrosScreenState extends State<LibrosScreen> {
   }
 
   Future<void> _navegarAgregarLibroScreen() async {
-    final creado = await Navigator.of(
-      context,
-    ).pushNamed<bool>(AppRoutes.createBook);
-    if (creado == true && mounted) _recargarLibros();
+    await Navigator.of(context).pushNamed<bool>(AppRoutes.createBook);
+    if (mounted) _recargarLibros();
   }
 
   Future<void> _eliminarLibro(LibroResponse libro) async {
