@@ -36,20 +36,17 @@ class LibroService {
     );
   }
 
-  Future<ApiResponse<LibroResponse>> crearLibro(
-    CrearLibroRequest request,
-  ) async {
+  Future<ApiResponse<void>> crearLibro(CrearLibroRequest request) async {
     final token = await _storage.readToken();
     if (token == null || token.isEmpty) {
       throw const SessionException(
         'No hay una sesión activa. Inicia sesión para crear un libro.',
       );
     }
-    return _api.post<LibroResponse>(
+    return _api.post<void>(
       '/Libros',
       headers: {'Authorization': 'Bearer $token'},
       body: request.toJson(),
-      fromJson: LibroResponse.fromJson,
     );
   }
 

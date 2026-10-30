@@ -103,7 +103,7 @@ class _AgregarLibroScreenState extends State<AgregarLibroScreen> {
 
       _limpiarFormulario();
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Libro creado correctamente.')),
+        const SnackBar(content: Text('El libro se creó correctamente.')),
       );
     } on ApiException catch (error) {
       if (!mounted) return;
