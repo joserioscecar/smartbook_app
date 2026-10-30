@@ -123,6 +123,7 @@ class ApiService {
     Map<String, dynamic>? queryParameters,
     Map<String, String>? headers,
     JsonParser<T>? parser,
+    bool ignoreResponseBody = false,
   }) => _request<T>(
     'PUT',
     endpoint,
@@ -130,6 +131,7 @@ class ApiService {
     queryParameters: queryParameters,
     headers: headers,
     parser: parser,
+    ignoreResponseBody: ignoreResponseBody,
   );
 
   Future<ApiResponse<T>> delete<T>(
@@ -159,6 +161,7 @@ class ApiService {
     Map<String, dynamic>? queryParameters,
     Map<String, String>? headers,
     JsonParser<T>? parser,
+    bool ignoreResponseBody = false,
   }) async {
     final uri = _buildUri(endpoint, queryParameters);
 
@@ -180,7 +183,11 @@ class ApiService {
 
       _log('← ${response.statusCode} $uri');
 
-      return _handleResponse<T>(response, parser);
+      return _handleResponse<T>(
+        response,
+        parser,
+        ignoreResponseBody: ignoreResponseBody,
+      );
     } on TimeoutException {
       throw const ApiTimeoutException();
     } on http.ClientException {
@@ -190,8 +197,9 @@ class ApiService {
 
   ApiResponse<T> _handleResponse<T>(
     http.Response response,
-    JsonParser<T>? parser,
-  ) {
+    JsonParser<T>? parser, {
+    bool ignoreResponseBody = false,
+  }) {
     final status = response.statusCode;
     final data = _decodeBody(response.bodyBytes);
 
@@ -211,7 +219,9 @@ class ApiService {
     try {
       return ApiResponse<T>(
         statusCode: status,
-        data: data == null ? null : _parse<T>(data, parser),
+        data: data == null || ignoreResponseBody
+            ? null
+            : _parse<T>(data, parser),
         headers: response.headers,
       );
     } catch (e) {

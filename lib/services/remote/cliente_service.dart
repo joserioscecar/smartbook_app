@@ -27,7 +27,7 @@ class ClienteService {
     );
   }
 
-  Future<ApiResponse<dynamic>> editarCliente(
+  Future<ApiResponse<void>> editarCliente(
     String identificacion,
     EditarClienteRequest request,
   ) async {
@@ -45,10 +45,11 @@ class ClienteService {
       );
     }
 
-    return _api.put<dynamic>(
+    return _api.put<void>(
       '/Clientes/${Uri.encodeComponent(identificacion.trim())}',
       headers: {'Authorization': 'Bearer $token'},
       body: request.toJson(),
+      ignoreResponseBody: true,
     );
   }
 }
