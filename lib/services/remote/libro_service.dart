@@ -2,17 +2,11 @@ import 'package:smartbook_app/config/app_config.dart';
 import 'package:smartbook_app/models/libro/libro_request.dart';
 import 'package:smartbook_app/models/libro/libro_response.dart';
 import 'package:smartbook_app/services/local/secure_storage_service.dart';
-import 'package:smartbook_app/services/local/session_storage.dart';
 import 'package:smartbook_app/services/remote/api_service.dart';
 
 class LibroService {
-  LibroService({ApiService? api, SessionStorage? storage}) {
-    _api = api ?? ApiService(baseUrl: AppConfig.apiBaseUrl);
-    _storage = storage ?? SecureStorageService();
-  }
-
-  late final ApiService _api;
-  late final SessionStorage _storage;
+  final _api = ApiService(baseUrl: AppConfig.apiBaseUrl);
+  final _storage = SecureStorageService();
 
   Future<ApiResponse<List<LibroResponse>>> listarLibros() async {
     final token = await _storage.readToken();

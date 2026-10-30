@@ -66,32 +66,26 @@ class ApiParseException extends ApiException {
 /// tiempo de espera o conversión se notifican mediante [ApiException].
 class ApiService {
   ApiService({
-    required String baseUrl,
+    required this.baseUrl,
     http.Client? client,
     Map<String, String>? defaultHeaders,
-    Duration timeout = const Duration(seconds: 30),
-    bool enableLogs = kDebugMode,
-    VoidCallback? onUnauthorized,
-  }) {
-    this.baseUrl = baseUrl;
-    this.timeout = timeout;
-    this.enableLogs = enableLogs;
-    this.onUnauthorized = onUnauthorized;
-    _client = client ?? http.Client();
-    _defaultHeaders = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      ...?defaultHeaders,
-    };
-  }
+    this.timeout = const Duration(seconds: 30),
+    this.enableLogs = kDebugMode,
+    this.onUnauthorized,
+  }) : _client = client ?? http.Client(),
+       _defaultHeaders = {
+         'Content-Type': 'application/json',
+         'Accept': 'application/json',
+         ...?defaultHeaders,
+       };
 
-  late final String baseUrl;
-  late final Duration timeout;
-  late final bool enableLogs;
-  late final VoidCallback? onUnauthorized;
+  final String baseUrl;
+  final Duration timeout;
+  final bool enableLogs;
+  final VoidCallback? onUnauthorized;
 
-  late final http.Client _client;
-  late final Map<String, String> _defaultHeaders;
+  final http.Client _client;
+  final Map<String, String> _defaultHeaders;
 
   Future<ApiResponse<T>> get<T>(
     String endpoint, {
@@ -209,7 +203,7 @@ class ApiService {
     final uri = _buildUri(endpoint, queryParameters);
 
     final requestHeaders = {..._defaultHeaders, ...?headers};
-    late final http.BaseRequest request;
+    final http.BaseRequest request;
     if (files != null) {
       requestHeaders.removeWhere(
         (name, _) => name.toLowerCase() == 'content-type',

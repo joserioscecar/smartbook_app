@@ -1,17 +1,11 @@
 import '../../config/app_config.dart';
 import '../../models/dashboard/dashboard_response.dart';
 import '../local/secure_storage_service.dart';
-import '../local/session_storage.dart';
 import 'api_service.dart';
 
 class DashboardService {
-  DashboardService({ApiService? api, SessionStorage? storage}) {
-    _api = api ?? ApiService(baseUrl: AppConfig.apiBaseUrl);
-    _storage = storage ?? SecureStorageService();
-  }
-
-  late final ApiService _api;
-  late final SessionStorage _storage;
+  final _api = ApiService(baseUrl: AppConfig.apiBaseUrl);
+  final _storage = SecureStorageService();
 
   Future<ApiResponse<DashboardResponse>> consultarDashboard() async {
     final token = await _storage.readToken();
