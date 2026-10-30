@@ -6,12 +6,13 @@ import 'package:smartbook_app/services/local/session_storage.dart';
 import 'package:smartbook_app/services/remote/api_service.dart';
 
 class ClienteService {
-  ClienteService({ApiService? api, SessionStorage? storage})
-    : _api = api ?? ApiService(baseUrl: AppConfig.apiBaseUrl),
-      _storage = storage ?? SecureStorageService();
+  ClienteService({ApiService? api, SessionStorage? storage}) {
+    _api = api ?? ApiService(baseUrl: AppConfig.apiBaseUrl);
+    _storage = storage ?? SecureStorageService();
+  }
 
-  final ApiService _api;
-  final SessionStorage _storage;
+  late final ApiService _api;
+  late final SessionStorage _storage;
 
   Future<ApiResponse<List<ClienteResponse>>> listarClientes() async {
     final token = await _storage.readToken();

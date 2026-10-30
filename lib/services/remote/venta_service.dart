@@ -8,12 +8,13 @@ import '../local/session_storage.dart';
 import 'api_service.dart';
 
 class VentaService {
-  VentaService({ApiService? api, SessionStorage? storage})
-    : _api = api ?? ApiService(baseUrl: AppConfig.apiBaseUrl),
-      _storage = storage ?? SecureStorageService();
+  VentaService({ApiService? api, SessionStorage? storage}) {
+    _api = api ?? ApiService(baseUrl: AppConfig.apiBaseUrl);
+    _storage = storage ?? SecureStorageService();
+  }
 
-  final ApiService _api;
-  final SessionStorage _storage;
+  late final ApiService _api;
+  late final SessionStorage _storage;
 
   Future<ApiResponse<List<VentaResumenResponse>>> listarVentas({
     DateTime? desde,

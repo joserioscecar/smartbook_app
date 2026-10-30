@@ -5,12 +5,13 @@ import '../local/session_storage.dart';
 import 'api_service.dart';
 
 class DashboardService {
-  DashboardService({ApiService? api, SessionStorage? storage})
-    : _api = api ?? ApiService(baseUrl: AppConfig.apiBaseUrl),
-      _storage = storage ?? SecureStorageService();
+  DashboardService({ApiService? api, SessionStorage? storage}) {
+    _api = api ?? ApiService(baseUrl: AppConfig.apiBaseUrl);
+    _storage = storage ?? SecureStorageService();
+  }
 
-  final ApiService _api;
-  final SessionStorage _storage;
+  late final ApiService _api;
+  late final SessionStorage _storage;
 
   Future<ApiResponse<DashboardResponse>> consultarDashboard() async {
     final token = await _storage.readToken();
