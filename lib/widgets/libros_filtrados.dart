@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../extensions/string_normalization_extension.dart';
 import '../models/libro/libro_response.dart';
 
 class LibrosFiltrados extends StatefulWidget {
@@ -28,22 +29,6 @@ class _LibrosFiltradosState extends State<LibrosFiltrados> {
     super.dispose();
   }
 
-  String _normalizar(String texto) {
-    var resultado = texto.trim().toLowerCase();
-    const acentos = {
-      'á': 'a',
-      'é': 'e',
-      'í': 'i',
-      'ó': 'o',
-      'ú': 'u',
-      'ü': 'u',
-    };
-    for (final entrada in acentos.entries) {
-      resultado = resultado.replaceAll(entrada.key, entrada.value);
-    }
-    return resultado;
-  }
-
   void _limpiar() => setState(() {
     _busqueda.clear();
     _nivel = null;
@@ -66,10 +51,10 @@ class _LibrosFiltradosState extends State<LibrosFiltrados> {
     // Si una recarga elimina la última opción seleccionada, vuelve a "Todos".
     if (!niveles.contains(_nivel)) _nivel = null;
     if (!tipos.contains(_tipo)) _tipo = null;
-    final consulta = _normalizar(_busqueda.text);
+    final consulta = _busqueda.text.normalizar();
     final filtrados = widget.libros.where((libro) {
       return (consulta.isEmpty ||
-              _normalizar(libro.nombre).contains(consulta)) &&
+              libro.nombre.normalizar().contains(consulta)) &&
           (_nivel == null || libro.nivel == _nivel) &&
           (_tipo == null || libro.tipo == _tipo) &&
           (!_soloDisponibles || (libro.stockTotal ?? 0) > 0);
