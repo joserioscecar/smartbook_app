@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io' if (dart.library.html) 'dart:html' as platform_http;
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -23,9 +24,12 @@ class ApiResponse<T> {
     this.rawData,
   });
 
-  bool get isSuccess => statusCode >= 200 && statusCode < 300;
-  bool get isUnauthorized => statusCode == 401;
-  bool get isNotFound => statusCode == 404;
+  bool get isSuccess =>
+      statusCode >= platform_http.HttpStatus.ok &&
+      statusCode < platform_http.HttpStatus.multipleChoices;
+  bool get isUnauthorized =>
+      statusCode == platform_http.HttpStatus.unauthorized;
+  bool get isNotFound => statusCode == platform_http.HttpStatus.notFound;
 }
 
 class ApiException implements Exception {
@@ -247,8 +251,9 @@ class ApiService {
     final status = response.statusCode;
     final data = _decodeBody(response.bodyBytes);
 
-    if (status < 200 || status >= 300) {
-      if (status == 401) {
+    if (status < platform_http.HttpStatus.ok ||
+        status >= platform_http.HttpStatus.multipleChoices) {
+      if (status == platform_http.HttpStatus.unauthorized) {
         onUnauthorized?.call();
       }
 
